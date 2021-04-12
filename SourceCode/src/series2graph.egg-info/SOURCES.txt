@@ -1,0 +1,10 @@
+setup.py
+series2graph/__init__.py
+series2graph/series2graph.py
+series2graph/series2graph_tools.py
+series2graph.egg-info/PKG-INFO
+series2graph.egg-info/SOURCES.txt
+series2graph.egg-info/dependency_links.txt
+series2graph.egg-info/not-zip-safe
+series2graph.egg-info/requires.txt
+series2graph.egg-info/top_level.txt

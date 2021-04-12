@@ -1,0 +1,8 @@
+numpy
+matplotlib
+plotly
+scipy
+pandas
+tqdm
+networkx
+sklearn
