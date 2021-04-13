@@ -56,8 +56,9 @@ clear_console = False #Clear console after each run?
 # In[226]:
 
 
-df = pd.read_csv('https://query1.finance.yahoo.com/v7/finance/download/BKHYY?period1=1201824000&period2=1617753600&interval=1d&events=history&includeAdjustedClose=true',)
-
+#df = pd.read_csv('https://query1.finance.yahoo.com/v7/finance/download/BKHYY?period1=1201824000&period2=1617753600&interval=1d&events=history&includeAdjustedClose=true',)
+#df = pd.read_csv('https://github.com/odedns/hackathon/blob/ffbc979dd0d3e2192ea96ff6bf9655fee068247e/SourceCode/DATA/33762.csv')
+df = pd.read_csv('D:/OneDrive/Download/Documents/GitHub/hackathon/SourceCode/DATA/33762.csv')
 #Convert date from string to datetime64[ns]
 df['Date'] = pd.to_datetime(df['Date'])
 print(df['Date'].min(), df['Date'].max())
@@ -79,21 +80,22 @@ print()
 
 fig, ax = plt.subplots(num=None, figsize=(14, 6), dpi=80, facecolor='w', edgecolor='k')
 size = df.shape[0]
-print(df['Open'])
+columns= df.columns
+print(df[columns[1]])
 ax.set_title("Stock prices")
-ax.plot(df['Date'], df['Open'], '-', color='blue', animated = True, linewidth=1)
-ax.plot(df['Date'], df['High'], '-', color='red', animated = True, linewidth=1)
-ax.plot(df['Date'], df['Low'], '-', color='green', animated = True, linewidth=1)
-ax.plot(df['Date'], df['Close'], '-', color='yellow', animated = True, linewidth=1)
-plt.legend(['Open', 'High','Low','Close'])
+# ax.plot(df['Date'], df[columns[1]], '-', color='blue', animated = True, linewidth=1)
+# ax.plot(df['Date'], df[columns[2]], '-', color='red', animated = True, linewidth=1)
+# ax.plot(df['Date'], df[columns[3]], '-', color='green', animated = True, linewidth=1)
+ax.plot(df['Date'], df[columns[4]], '-', color='blue', animated = True, linewidth=1)
+plt.legend(df.columns[1:4])
 plt.show()
 
 fig, ax = plt.subplots(num=None, figsize=(14, 6), dpi=80, facecolor='w', edgecolor='k')
 size = df.shape[0]
-print(df['Open'])
+print(df[columns[4]])
 ax.set_title("Daily transaction")
-ax.plot(df['Date'], df['Volume'], '-', color='blue', animated = True, linewidth=1)
-plt.legend(['Volume'])
+ax.plot(df['Date'], df[columns[4]], '-', color='blue', animated = True, linewidth=1)
+plt.legend([columns[4]])
 plt.show()
 if (clear_console):
     IPython.display.clear_output()
@@ -106,8 +108,10 @@ print()
 # In[228]:
 
 
-train = df.loc[df['Date'] <= '2021-12-31']
-test  = df.loc[df['Date'] >  '2021-12-31']
+#train = df.loc[df['Date'] <= '2021-12-31']
+#test  = df.loc[df['Date'] >  '2021-12-31']
+train= df.copy()
+test = df.copy()
 print(f'train shape {train.shape}, train shape {test.shape}')
 print(f'train tail\n {train.tail()}\ntest head:\n {test.head()}')
 if (clear_console):
@@ -128,7 +132,8 @@ print()
 print('Transform data using scaler')
 train_scaled = train.copy()
 scalers={}
-columns= ['Open','High','Low','Close','Adj Close','Volume']
+#columns= ['Open','High','Low','Close','Adj Close','Volume']
+columns= ['CPU1']
 for i in columns: # train.columns:
     scaler = MinMaxScaler(feature_range=(-1,1))
     s_s = scaler.fit_transform(train_scaled[i].values.reshape(-1,1))
@@ -201,8 +206,6 @@ print()
 
 # # RNN model with one LSTM hidden layer
 # ![image.png](attachment:image.png)
-
-# In[231]:
 
 
 # In[Build model]
@@ -368,8 +371,6 @@ model_e2d2.summary()
 if (clear_console):
     IPython.display.clear_output()
 print()
-
-# In[238]:
 
 
 # In[fit model_e2d2]
@@ -539,7 +540,7 @@ max_trainMAE = 0.15 #Define max threshold.
 plt.legend(columns)
 histogram = np.histogram(trainMAE, bins=30, range=None, normed=None, weights=None, density=None)
 print(histogram)
-max_trainMAE = histogram[1][20] #Define max threshold.
+max_trainMAE = histogram[1][18] #Define max threshold.
 anomaly_df = pd.DataFrame(pred128_unscaled[:,0,:],columns=columns)
 for i in range(len(columns)):
    anomaly_df[f'MAE {columns[i]}'] = trainMAE[:,i]
@@ -562,8 +563,6 @@ if (clear_console):
     IPython.display.clear_output()
 print()
 
-
-# In[ ]:
 
 
 
