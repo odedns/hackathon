@@ -1,8 +1,8 @@
-numpy
 matplotlib
+networkx
+numpy
+pandas
 plotly
 scipy
-pandas
-tqdm
-networkx
 sklearn
+tqdm

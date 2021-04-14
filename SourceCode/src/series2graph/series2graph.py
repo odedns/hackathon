@@ -39,9 +39,9 @@ class Series2Graph():
 
 		self.graph = {}
 
-	def fit(self,ts):
-		min_df_r = min(ts[0].values)
-		max_df_r = max(ts[0].values)
+	def fit(self,ts,index=0):
+		min_df_r = min(ts[index].values)
+		max_df_r = max(ts[index].values)
 
 		df_ref = []
 		for i in np.arange(min_df_r, max_df_r,(max_df_r-min_df_r)/100):
@@ -52,7 +52,7 @@ class Series2Graph():
 			df_ref.append(tmp)
 		df_ref = pd.DataFrame(df_ref)
 		
-		phase_space_1 = build_phase_space(ts[0].values,self.latent,self.pattern_length)
+		phase_space_1 = build_phase_space(ts[index].values,self.latent,self.pattern_length)
 
 		pca_1 = PCA(n_components=3)
 		pca_1.fit(phase_space_1)
