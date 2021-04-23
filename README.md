@@ -26,3 +26,10 @@ Running jupyter notebook as docker container:
 	http://localhost:8889
 	enter the token given on the cmd line to login
 	
+
+if you want to mount your local dir into the docker container use:
+docker run  -v <your local dir>:/usr/src/app/<name of dir> -it --name hack --rm -p 8889:8888   odedns/hack 
+for example:
+docker run  -v /home/oded/dev/python/docker/hackathon/SourceCode/example/:/usr/src/app/ex -it --name hack --rm -p 8889:8888   odedns/hack 
+
+This will expose the example directory to jupyter running on docker as the ex directory.
