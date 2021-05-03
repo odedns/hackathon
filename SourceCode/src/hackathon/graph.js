@@ -1,6 +1,8 @@
 var ctx = document.getElementById("values-chart");
 var xStart = new Date().getMilliseconds();
 var mydata = [];
+
+var delta = 100;
 getData();
 var valChart = new Chart(ctx, {
     type: 'line',
@@ -100,16 +102,21 @@ var valChart = new Chart(ctx, {
   });
 
 
+  setInterval(update,10000);
+
   function update() {
       console.log("in update()");
-      $.getJSON( "/data?limit=10?skip=50", function( data ) {
-        //console.log(data);
-        console.log("x = " + data[0].x);
-        
-        chart.data.datasets[0].data.splice(0,10); 
-        chart.data.datasets[0].data.push(...data);
-        chart.update();
-        console.log("updated chart");
+      $.getJSON( "/s2g?delta="+ delta, function( data ) {
+        valChart.data.datasets[0].data = data.values;
+        valChart.data.datasets[1].data = data.anom_val;
+
+        valChart.update();
+        scoreChart.data.datasets[0].data = data.scores;
+        scoreChart.data.datasets[1].data = data.anom_score;
+
+        scoreChart.update();
+        delta+=100;
+        console.log("updated chart new delta=" + delta);
 
     });
   }
@@ -118,7 +125,7 @@ var valChart = new Chart(ctx, {
 
   function getData() {
     console.log("in get data");
-    $.getJSON( "/s2g?limit=5000", function( data ) {
+    $.getJSON( "/s2g?limit=2000", function( data ) {
         valChart.data.datasets[0].data = data.values;
         valChart.data.datasets[1].data = data.anom_val;
 
