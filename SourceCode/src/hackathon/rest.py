@@ -29,7 +29,7 @@ def s2g():
     
     client = MongoClient()
     db = client.hack
-    collection = db.materna
+    collection = db.materna1
     df = pd.DataFrame(list(collection.find().limit(limit).skip(delta)))
    
 
