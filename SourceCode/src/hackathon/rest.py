@@ -26,16 +26,12 @@ def s2g():
     limit = request.args.get("limit", 5000, type=int)
     delta = request.args.get("delta", 0, type=int)
     print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta);
-    limit = limit + delta
-    print("new limit = " , limit)
+    
     client = MongoClient()
     db = client.hack
-    collection = db.cpu
-    df = pd.DataFrame(list(collection.find().limit(limit)))
-    if(delta > 0):
-       df = df.iloc[delta:]
-       print("truncate size =" ,df['y'].size)
-
+    collection = db.materna
+    df = pd.DataFrame(list(collection.find().limit(limit).skip(delta)))
+   
 
     df = df.drop(columns=['_id','date'])
     s2gw = S2gWrapper(df, qlen, plen)
