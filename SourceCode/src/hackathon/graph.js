@@ -11,13 +11,13 @@ var valChart = new Chart(ctx, {
             data: mydata, 
             label: "CPU",
             borderColor: 'blue',
-            borderWidth: 2,
+            borderWidth: 1,
             fill: false
         },{
             data: mydata, 
             label: "Anomality",
             borderColor: 'red',
-            borderWidth: 10,
+            borderWidth: 8,
             fill: false
         }
 
@@ -26,13 +26,11 @@ var valChart = new Chart(ctx, {
     options: {
       title: {
         display: true,
-        text: 'CPU values',
-        responsive: true,
-        maintainAspectRatio: false,
-        spanGaps: true
-
+        text: 'CPU values'
       },
-
+      responsive: true,
+        maintainAspectRatio: true,
+        spanGaps: false,
       scales: {
         x: {
             type: 'timeseries',
@@ -75,11 +73,12 @@ var valChart = new Chart(ctx, {
     options: {
       title: {
         display: true,
-        text: 'CPU Anomality score',
-        responsive: true,
-        maintainAspectRatio: false,
-        spanGaps: true
+        text: 'CPU Anomality score'
       },
+      responsive: true,
+        maintainAspectRatio: true,
+        spanGaps: false,
+     
 
       scales: {
         x: {

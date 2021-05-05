@@ -7,6 +7,7 @@ from s2g_wrapper import *
 from pymongo import MongoClient
 import json
 import numpy as np
+import os
 
 
 app = Flask(__name__, static_url_path='', static_folder='./')
@@ -26,8 +27,10 @@ def s2g():
     limit = request.args.get("limit", 5000, type=int)
     delta = request.args.get("delta", 0, type=int)
     print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta);
-    
-    client = MongoClient()
+    host = os.getenv('MONGO_HOST','localhost')
+    port = os.getenv('MONGO_PORT',27017)
+    print("host=",host," port=",int(port))
+    client = MongoClient(host=host,port=int(port))
     db = client.hack
     collection = db.materna1
     df = pd.DataFrame(list(collection.find().limit(limit).skip(delta)))
@@ -67,7 +70,6 @@ def s2g():
     return(d)
 
 
-#def calc(df,qlen,plen)
 
 
 @app.route('/data')
@@ -76,7 +78,9 @@ def data():
     limit = request.args.get("limit", 100, type=int)
     skip = request.args.get("skip", 100, type=int)
 
-    client = MongoClient()
+    host = os.getenv('MONGO_HOST','localhost')
+    port = os.getenv('MONGO_PORT',27017)
+    client = MongoClient(host=host,port=int(port))
     db = client.hack
     collection = db.cpu
     df = pd.DataFrame(list(collection.find().limit(500)))
