@@ -43,24 +43,28 @@ Running the web application
  use hack
 4. import the materna data from the DATA folder into mongo:
 mongoimport -d hack -c materna1 --type csv --file materna-2-01.csv --headerline
-4a. allow remote connections to mongo:
+
+
+5. allow remote connections to mongo:
 edit /etc/mongod.conf in the following section:
+```
 net:
   port: 27017
   bindIp: 0.0.0.0
   #bindIp: 127.0.0.1
-
+```
 set the following value for bindIp 0.0.0.0
 restart the mongo service
 
 
-5. build the web app container:
+6. build the web app container:
 docker build -f hackathon/SourceCode/Dockerfile.flask -t odedns/hack_flask .
 
-6. run the docker container:
+7. run the docker container:
+```
 docker run -it --name hack_flask --rm -p 5001:5000 -e MONGO_HOST=172.17.0.1 -e MONGO_PORT=27017 odedns/hack_flask 
-
-7. access the webapp at:
+```
+8. access the webapp at:
 
 http://localhost:5001/graph
 
