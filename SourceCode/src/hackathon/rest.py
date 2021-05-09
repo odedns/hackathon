@@ -26,13 +26,15 @@ def s2g():
     plen = request.args.get("plen", 75, type=int)   
     limit = request.args.get("limit", 5000, type=int)
     delta = request.args.get("delta", 0, type=int)
-    print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta);
+    colName = request.args.get("colName","materna1",type=str)
+
+    print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta, "colName=",colName);
     host = os.getenv('MONGO_HOST','localhost')
     port = os.getenv('MONGO_PORT',27017)
     print("host=",host," port=",int(port))
     client = MongoClient(host=host,port=int(port))
     db = client.hack
-    collection = db.materna1
+    collection = db[colName]
     df = pd.DataFrame(list(collection.find().limit(limit).skip(delta)))
    
 
@@ -71,24 +73,15 @@ def s2g():
 
 
 
-
-@app.route('/data')
-def data():
-    args = request.args
-    limit = request.args.get("limit", 100, type=int)
-    skip = request.args.get("skip", 100, type=int)
-
+@app.route('/test')
+def test():
     host = os.getenv('MONGO_HOST','localhost')
     port = os.getenv('MONGO_PORT',27017)
+    print("host=",host," port=",int(port))
     client = MongoClient(host=host,port=int(port))
     db = client.hack
-    collection = db.cpu
-    df = pd.DataFrame(list(collection.find().limit(500)))
-    #df = df.iloc[8000:]
-    df2 = df.drop(columns=['_id','date'])
-    json =df2.to_json(orient="records")
-    print("/data  done ...")
-    return(json)
-
-
-    
+    collection = db.materna1
+    res = list(collection.find().limit(10))
+    print(res)
+    print("size returned: ",len(res))
+    return("success ...size returned: " +str( len(res)))
