@@ -44,8 +44,7 @@ Running the web application
 4. import the materna data from the DATA folder into mongo:
 mongoimport -d hack -c materna1 --type csv --file materna-2-01.csv --headerline
 4a. allow remote connections to mongo:
-edit /etc/mongod.conf
-# network interfaces
+edit /etc/mongod.conf in the follwing section:
 net:
   port: 27017
   bindIp: 0.0.0.0
