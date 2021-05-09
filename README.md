@@ -33,3 +33,24 @@ for example:
 docker run  -v /home/oded/dev/python/docker/hackathon/SourceCode/example/:/usr/src/app/ex -it --name hack --rm -p 8889:8888   odedns/hack 
 
 This will expose the example directory to jupyter running on docker as the ex directory.
+
+
+Running the web application
+---------------------------
+1. install mongodb
+2. load the appropriate data into mongo
+3. create db:
+ use hack
+4. import the materna data from the DATA folder into mongo:
+mongoimport -d hack -c materna1 --type csv --file materna-2-01.csv --headerline
+
+5. build the web app container:
+docker build -f hackathon/SourceCode/Dockerfile.flask -t odedns/hack_flask .
+
+6. run the docker container:
+docker run -it --name hack_flask --rm -p 5001:5000 -e MONGO_HOST=172.17.0.1 -e MONGO_PORT=27017 odedns/hack_flask 
+
+7. access the webapp at:
+
+http://localhost:5001/graph
+
