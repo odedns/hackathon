@@ -1,6 +1,6 @@
 # hackathon
 
-Running the rest api:
+## Running the rest api:
 ```
 cd SourceCode/src/hackathon
 
@@ -13,7 +13,7 @@ access from your browser :
 http://localhost:5000/s2g?filename=<filename in DATA folder>&index=<column index in csv>&plen=<pattenr_len>&qlen=<query_len>
 ```
   
-Running jupyter notebook as docker container:
+## Running jupyter notebook as docker container:
 1. create empty dir and cd to that dir
  
 2. clone the project :
@@ -45,8 +45,7 @@ docker run  -v /home/oded/dev/python/docker/hackathon/SourceCode/example/:/usr/s
 This will expose the example directory to jupyter running on docker as the ex directory.
 
 
-Running the web application
----------------------------
+## Running the web application
 1. install mongodb
 2. load the appropriate data into mongo
 3. create db:
