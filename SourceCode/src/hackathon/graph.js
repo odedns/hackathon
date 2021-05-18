@@ -1,8 +1,17 @@
-var ctx = document.getElementById("values-chart");
+var ctx = $("#values-chart");
 var xStart = new Date().getMilliseconds();
 var mydata = [];
 
-var delta = 100;
+var plen = parseInt(getParameterByName("plen")) || 100
+var qlen = parseInt(getParameterByName("qlen")) || 75;
+var limit = parseInt(getParameterByName("limit")) || 2000;
+var delta = parseInt(getParameterByName("delta")) || 100;
+var colName = getParameterByName("colName") || "materna1";
+var threshold = parseFloat(getParameterByName("threshold")) || 0.7;
+
+console.log("plen = "+  plen + " qlen = " + qlen + " limit = " + limit + " delta =" + delta + " colName=" + colName + " threshold=" + threshold);
+
+
 getData();
 var valChart = new Chart(ctx, {
     type: 'line',
@@ -11,13 +20,13 @@ var valChart = new Chart(ctx, {
             data: mydata, 
             label: "CPU",
             borderColor: 'blue',
-            borderWidth: 2,
+            borderWidth: 1,
             fill: false
         },{
             data: mydata, 
             label: "Anomality",
             borderColor: 'red',
-            borderWidth: 10,
+            borderWidth: 5,
             fill: false
         }
 
@@ -26,13 +35,22 @@ var valChart = new Chart(ctx, {
     options: {
       title: {
         display: true,
-        text: 'CPU values',
-        responsive: true,
-        maintainAspectRatio: false,
-        spanGaps: true
-
+        text: 'CPU values'
       },
-
+      pan: {
+        enabled: true,
+        mode: 'xy',
+        onPan: function () { console.log('I was panned!!!'); }
+      },
+      zoom: {
+        enabled: true,
+        drag: false,
+        mode: 'xy',
+        onZoom: function () { console.log('I was zoomed!!!'); }
+      },
+      responsive: true,
+        maintainAspectRatio: true,
+        spanGaps: false,
       scales: {
         x: {
             type: 'timeseries',
@@ -53,7 +71,7 @@ var valChart = new Chart(ctx, {
     }
   });
 
-  var ctx2 = document.getElementById("score-chart");
+  var ctx2 = $("#score-chart");
   var scoreChart = new Chart(ctx2, {
     type: 'line',
     data: {
@@ -75,11 +93,23 @@ var valChart = new Chart(ctx, {
     options: {
       title: {
         display: true,
-        text: 'CPU Anomality score',
-        responsive: true,
-        maintainAspectRatio: false,
-        spanGaps: true
+        text: 'CPU Anomality score'
       },
+      pan: {
+        enabled: true,
+        mode: 'xy',
+        onPan: function () { console.log('I was panned!!!'); }
+      },
+      zoom: {
+        enabled: true,
+        drag: false,
+        mode: 'xy',
+        onZoom: function () { console.log('I was zoomed!!!'); }
+      },
+      responsive: true,
+        maintainAspectRatio: true,
+        spanGaps: false,
+     
 
       scales: {
         x: {
@@ -106,7 +136,9 @@ var valChart = new Chart(ctx, {
 
   function update() {
       console.log("in update()");
-      $.getJSON( "/s2g?delta="+ delta, function( data ) {
+      let url = "/s2g?delta="+delta + "&plen="+plen+"&qlen="+ qlen+ "&colName="+colName+"&limit="+ limit + "&threshold="+ threshold;
+      console.log("url=" + url);
+      $.getJSON( url, function( data ) {
         valChart.data.datasets[0].data = data.values;
         valChart.data.datasets[1].data = data.anom_val;
 
@@ -125,7 +157,9 @@ var valChart = new Chart(ctx, {
 
   function getData() {
     console.log("in get data");
-    $.getJSON( "/s2g?limit=2000", function( data ) {
+    let url = "/s2g?delta=0" + "&plen="+plen+"&qlen="+ qlen+ "&colName="+colName+"&limit="+ limit+ "&threshold=" + threshold;
+    console.log("url=" + url);
+    $.getJSON( url, function( data ) {
         valChart.data.datasets[0].data = data.values;
         valChart.data.datasets[1].data = data.anom_val;
 
@@ -137,4 +171,35 @@ var valChart = new Chart(ctx, {
         console.log("updated chart");
 
     });
+  }
+  function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }  
+
+
+  function handleApply(){
+    console.log("handle close");
+    plen = parseInt($("#plen").val());
+    qlen =  parseInt($("#qlen").val());
+    limit =  parseInt($("#limit").val());
+    delta =  parseInt($("#delta").val());
+    threshold= parseFloat($("#threshold").val());
+    colName = $("#colName").val();
+    console.log("plen = " + plen + " qlen=" + qlen + " limit = " + limit + " delta=" + delta + " threshold=" + threshold + " colName=" + colName);
+    let orig = window.location.href.split("#")[0].split("?")[0]
+    console.log("orig=" + orig);
+    let url = orig + "?plen="+plen + "&qlen=" + qlen + "&limit=" + limit + "&delta=" + delta + "&threshold="+ threshold +"&colName=" + colName;
+    console.log("url = " + url);
+    window.location.href = url;
+
+  }
+
+  function setValues() {
+    console.log("setValues()");
+    $("#plen").val(plen);
+    $("#qlen").val(qlen);
+    $("#limit").val(limit);
+    $("#delta").val(delta);
+    $("#threshold").val(threshold);
   }

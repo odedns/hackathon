@@ -1,0 +1,9 @@
+
+FROM python:3
+WORKDIR /usr/src/app
+COPY hackathon ./
+RUN pip install numpy pandas flask setuptools pymongo
+RUN cd SourceCode/src  && python3  ./setup.py build && python3 ./setup.py install 
+WORKDIR /usr/src/app/SourceCode/src/hackathon
+ENV FLASK_APP=rest.py
+ENTRYPOINT flask run --host=0.0.0.0
