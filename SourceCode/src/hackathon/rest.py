@@ -35,10 +35,9 @@ def s2g():
 
 
     print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta, "colName=",colName," threshold=",threshold);
-    host = os.getenv('MONGO_HOST','localhost')
-    port = os.getenv('MONGO_PORT',27017)
+    mongoUrl = os.getenv('MONGO_URL','mongodb://localhost:27017/hack')
     print("host=",host," port=",int(port))
-    client = MongoClient(host=host,port=int(port))
+    client = MongoClient(mongoUrl)
     db = client.hack
     collection = db[colName]
     df = pd.DataFrame(list(collection.find().limit(limit).skip(delta)))

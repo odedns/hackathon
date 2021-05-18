@@ -61,7 +61,7 @@ docker build -f hackathon/SourceCode/Dockerfile.flask -t odedns/hack_flask .
 ```
 7. run the docker container:
 ```
-docker run -it --name hack_flask --rm -p 5001:5000 -e MONGO_HOST=172.17.0.1 -e MONGO_PORT=27017 odedns/hack_flask 
+docker run -it --name hack_flask --rm -p 5001:5000 -e MONGO_URL=mongodb://localhost:27017/hack
 ```
 8. access the webapp at:
 

@@ -26,7 +26,7 @@ var valChart = new Chart(ctx, {
             data: mydata, 
             label: "Anomality",
             borderColor: 'red',
-            borderWidth: 8,
+            borderWidth: 5,
             fill: false
         }
 
