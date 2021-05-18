@@ -18,6 +18,10 @@ def static_file():
     print('in static file')
     return app.send_static_file('./graph.html')
 
+@app.route('/testchartjs')
+def static_testChartjs():
+    print('in static file')
+    return app.send_static_file('./test_chartsjs.html')
 
 @app.route('/s2g')
 def s2g():
@@ -27,8 +31,10 @@ def s2g():
     limit = request.args.get("limit", 5000, type=int)
     delta = request.args.get("delta", 0, type=int)
     colName = request.args.get("colName","materna1",type=str)
+    threshold = request.args.get("threshold",0.7,type=int)
 
-    print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta, "colName=",colName);
+
+    print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta, "colName=",colName," threshold=",threshold);
     host = os.getenv('MONGO_HOST','localhost')
     port = os.getenv('MONGO_PORT',27017)
     print("host=",host," port=",int(port))
@@ -51,7 +57,6 @@ def s2g():
 
     df2['scores'] = scores
 # create anom values and scores
-    threshold = 0.6
     anom_val = [];
     anom_score = [];
     for i in range(len(scores)):
