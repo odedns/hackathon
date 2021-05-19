@@ -36,7 +36,6 @@ def s2g():
 
     print("qlen=",qlen, " plen=",plen , " limit = ",limit, " delta=",delta, "colName=",colName," threshold=",threshold);
     mongoUrl = os.getenv('MONGO_URL','mongodb://localhost:27017/hack')
-    print("host=",host," port=",int(port))
     client = MongoClient(mongoUrl)
     db = client.hack
     collection = db[colName]
